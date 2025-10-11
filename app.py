@@ -26,7 +26,7 @@ def home():
     return render_template("index.html")
 
 # 註冊 API
-@app.route('/register', methods=['GET'])
+@app.route('/register', methods=['POST'])
 def register():
     data = request.json
     username = data.get('username')
@@ -48,7 +48,7 @@ def register():
     return jsonify({'message': '註冊成功'})
 
 # 登入 API
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
     data = request.json
     username = data.get('username')
