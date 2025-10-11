@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>註冊 - 手語教學平台</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0; padding: 0;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+  }
+  form {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 320px;
+  }
+  h1 {
+    margin-bottom: 20px;
+    font-weight: normal;
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0066cc;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #004999;
+  }
+  .message {
+    margin-top: 15px;
+    color: red;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .link {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .link a {
+    color: #0066cc;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<form id="registerForm">
+  <h1>註冊</h1>
+  <label for="username">帳號</label>
+  <input type="text" id="username" name="username" required />
+  <label for="email">電子郵件</label>
+  <input type="email" id="email" name="email" required />
+  <label for="password">密碼</label>
+  <input type="password" id="password" name="password" required />
+  <label for="passwordConfirm">確認密碼</label>
+  <input type="password" id="passwordConfirm" name="passwordConfirm" required />
+  <button type="submit">註冊</button>
+  <div class="message" id="msg"></div>
+  <div class="link">已有帳號？<a href="login.html">登入</a></div>
+</form>
+
+<script>
+  const form = document.getElementById('registerForm');
+  const msg = document.getElementById('msg');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = form.username.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    const passwordConfirm = form.passwordConfirm.value;
+
+    if (password !== passwordConfirm) {
+      msg.textContent = '密碼確認不一致';
+      return;
+    }
+
+    // 簡單模擬註冊成功
+    alert('註冊成功！請登入。');
+    window.location.href = 'login.html';
+  });
+</script>
+
+</body>
+</html>

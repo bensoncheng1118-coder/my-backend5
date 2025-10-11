@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>登入 - 手語教學平台</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0; padding: 0;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+  }
+  form {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 320px;
+  }
+  h1 {
+    margin-bottom: 20px;
+    font-weight: normal;
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0066cc;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #004999;
+  }
+  .message {
+    margin-top: 15px;
+    color: red;
+    font-size: 0.9em;
+    text-align: center;
+  }
+  .link {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .link a {
+    color: #0066cc;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<form id="loginForm">
+  <h1>登入</h1>
+  <label for="username">帳號</label>
+  <input type="text" id="username" name="username" required />
+  <label for="password">密碼</label>
+  <input type="password" id="password" name="password" required />
+  <button type="submit">登入</button>
+  <div class="message" id="msg"></div>
+  <div class="link">還沒有帳號？<a href="register.html">註冊</a></div>
+</form>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const msg = document.getElementById('msg');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = form.username.value.trim();
+    const password = form.password.value;
+
+    // 簡單硬編帳號密碼示範，正式請走後端驗證
+    if (username === 'user' && password === 'password') {
+      localStorage.setItem('loggedIn', 'true');
+      alert('登入成功！');
+      window.location.href = 'index.html';
+    } else {
+      msg.textContent = '帳號或密碼錯誤';
+    }
+  });
+</script>
+
+</body>
+</html>
