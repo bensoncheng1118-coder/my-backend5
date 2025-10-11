@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify, session
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
+from flask import render_template
 import os
-import render_template
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 CORS(app)
