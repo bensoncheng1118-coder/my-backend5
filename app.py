@@ -20,6 +20,9 @@ if not mongo or not hasattr(mongo, 'db'):
 
 users_coll = mongo.db.users
 
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 # 註冊 API
 @app.route('/api/register', methods=['POST'])
