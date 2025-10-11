@@ -28,16 +28,16 @@ def home():
 # 註冊 API
 @app.route('/register', methods=['POST'])
 def register():
-    data = request.json
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
+    # 用 request.form 接表單資料
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     if not username or not email or not password:
-        return jsonify({'error': '缺少必填欄位'}), 400
+        return "缺少必填欄位", 400  # 表單提交，直接回文字即可
 
     if users_coll.find_one({'username': username}):
-        return jsonify({'error': '使用者名稱已存在'}), 400
+        return "使用者名稱已存在", 400
 
     hashed_pw = generate_password_hash(password)
     users_coll.insert_one({
@@ -45,31 +45,35 @@ def register():
         'email': email,
         'password': hashed_pw
     })
-    return jsonify({'message': '註冊成功'})
+    
+    return redirect('/login')  # 註冊成功後跳轉到登入頁
+
 
 # 登入 API
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    username = data.get('username')
-    password = data.get('password')
+    # 用 request.form 接表單資料
+    username = request.form.get('username')
+    password = request.form.get('password')
 
     if not username or not password:
-        return jsonify({'error': '缺少帳號或密碼'}), 400
+        return "缺少帳號或密碼", 400  # 這裡可以直接回文字，表單提交會跳頁
 
     user = users_coll.find_one({'username': username})
     if user and check_password_hash(user['password'], password):
         session['user_id'] = str(user['_id'])
         session['username'] = user['username']
-        return jsonify({'message': '登入成功'})
+        return redirect('/')  # 登入成功後跳回首頁
     else:
-        return jsonify({'error': '帳號或密碼錯誤'}), 401
+        return "帳號或密碼錯誤", 401
+
 
 # 登出 API
-@app.route('/api/logout', methods=['POST'])
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
-    return jsonify({'message': '已登出'})
+    return redirect('/')  # 登出後跳回首頁
+
 
 # 取得登入狀態
 @app.route('/api/status', methods=['GET'])
