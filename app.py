@@ -25,8 +25,16 @@ users_coll = mongo.db.users
 def home():
     return render_template("index.html")
 
+@app.route('/login', methods=['GET'])
+def login_page():
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET'])
+def register_page():
+    return render_template('register.html')
+    
 # 註冊 API
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     # 用 request.form 接表單資料
     username = request.form.get('username')
@@ -50,7 +58,7 @@ def register():
 
 
 # 登入 API
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     # 用 request.form 接表單資料
     username = request.form.get('username')
