@@ -9,10 +9,17 @@ app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 CORS(app)
 
 # MongoDB 設定(請自行替換為實際連線字串)
-app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+mongo_uri = os.environ.get("MONGO_URI")
+if not mongo_uri:
+    raise ValueError("請先設定環境變數 MONGO_URI")
+app.config["MONGO_URI"] = mongo_uri
 mongo = PyMongo(app)
+# 確認 mongo 正確初始化
+if not mongo or not hasattr(mongo, 'db'):
+    raise RuntimeError("MongoDB 連線初始化失敗")
 
 users_coll = mongo.db.users
+
 
 # 註冊 API
 @app.route('/api/register', methods=['POST'])
