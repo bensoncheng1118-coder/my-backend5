@@ -58,13 +58,21 @@
     color: #555;
     pointer-events: all;
   }
+  nav form {
+    display: inline;
+    margin: 0;
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <button id="loginBtn">登入</button>
-  <button id="registerBtn">註冊</button>
+  <form action="https://sign-language-1118.onrender.com/login" method="POST">
+    <button type="submit">登入</button>
+  </form>
+  <form action="https://sign-language-1118.onrender.com/register" method="POST">
+    <button type="submit">註冊</button>
+  </form>
 </nav>
 
 <section id="video-section">
@@ -75,16 +83,7 @@
 </section>
 
 <script>
-  const loginBtn = document.getElementById('loginBtn');
-  const registerBtn = document.getElementById('registerBtn');
   const videoMask = document.getElementById('video-mask');
-
-  loginBtn.addEventListener('click', () => {
-    window.location.href = 'https://sign-language-1118.onrender.com/login';
-  });
-  registerBtn.addEventListener('click', () => {
-    window.location.href = 'https://sign-language-1118.onrender.com/register';
-  });
 
   // 假設登入狀態用 localStorage 簡易模擬
   window.onload = () => {
