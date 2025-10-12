@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from flask import render_template
+from flask import redirect
 import os
 
 app = Flask(__name__)
