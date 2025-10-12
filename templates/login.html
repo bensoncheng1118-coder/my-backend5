@@ -69,7 +69,8 @@
 </head>
 <body>
 
-<form id="loginForm">
+<!-- 修改這裡：直接提交到後端 /api/login -->
+<form id="loginForm" action="/api/login" method="POST">
   <h1>登入</h1>
   <label for="username">帳號</label>
   <input type="text" id="username" name="username" required />
@@ -85,18 +86,12 @@
   const msg = document.getElementById('msg');
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = form.username.value.trim();
-    const password = form.password.value;
-
-    // 簡單硬編帳號密碼示範，正式請走後端驗證
-    if (username === 'user' && password === 'password') {
-      localStorage.setItem('loggedIn', 'true');
-      alert('登入成功！');
-      window.location.href = 'index.html';
-    } else {
-      msg.textContent = '帳號或密碼錯誤';
+    // 前端只做必填欄位檢查，其他交給後端驗證
+    if (!form.username.value.trim() || !form.password.value) {
+      e.preventDefault();
+      msg.textContent = '請填寫帳號與密碼';
     }
+    // 其他行為交給表單直接提交
   });
 </script>
 
