@@ -135,13 +135,13 @@
   const userMenuButton = document.getElementById('user-menu-button');
   const userMenu = document.getElementById('user-menu');
 
-  // 假設登入狀態用 localStorage 簡易模擬，並且存在使用者名稱
   window.onload = () => {
-    const loggedIn = localStorage.getItem('loggedIn');
-    const username = localStorage.getItem('username') || '使用者';
+    // 從後端傳來的登入狀態，如果沒有後端支援再 fallback 到 localStorage
+    const loggedIn = window.loggedIn || localStorage.getItem('loggedIn') === 'true';
+    const username = window.username || localStorage.getItem('username') || '使用者';
 
-    if (loggedIn === 'true') {
-      videoMask.style.display = 'none'; // 隱藏遮罩，允許觀看影片
+    if (loggedIn) {
+      videoMask.style.display = 'none'; // 隱藏遮罩
 
       // 嵌入 YouTube 影片
       const youtubeID = 'rboiHxBqdZk'; 
@@ -167,7 +167,6 @@
     }
   }
 
-  // 點擊 username 按鈕時切換帳號管理選單顯示
   userMenuButton.addEventListener('click', () => {
     if (userMenu.style.display === 'block') {
       userMenu.style.display = 'none';
@@ -176,7 +175,6 @@
     }
   });
 
-  // 點擊頁面其它地方時，收合帳號管理選單
   document.addEventListener('click', (e) => {
     if (!userMenu.contains(e.target) && e.target !== userMenuButton) {
       userMenu.style.display = 'none';
