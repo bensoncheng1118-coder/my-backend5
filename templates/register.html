@@ -69,7 +69,8 @@
 </head>
 <body>
 
-<form id="registerForm">
+<!-- 修改這裡：直接提交到後端 /api/register -->
+<form id="registerForm" action="/api/register" method="POST">
   <h1>註冊</h1>
   <label for="username">帳號</label>
   <input type="text" id="username" name="username" required />
@@ -89,20 +90,16 @@
   const msg = document.getElementById('msg');
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = form.username.value.trim();
-    const email = form.email.value.trim();
+    // 保留前端密碼確認驗證
     const password = form.password.value;
     const passwordConfirm = form.passwordConfirm.value;
 
     if (password !== passwordConfirm) {
+      e.preventDefault(); // 阻止送出
       msg.textContent = '密碼確認不一致';
       return;
     }
-
-    // 簡單模擬註冊成功
-    alert('註冊成功！請登入。');
-    window.location.href = 'https://sign-language-1118.onrender.com/login';
+    // 其他行為交給表單直接提交，不需要 alert 或 JS 跳轉
   });
 </script>
 
