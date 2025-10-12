@@ -24,7 +24,14 @@ users_coll = mongo.db.users
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # 從 session 取出使用者資料，如果沒有登入則為 None
+    user = session.get("user")
+    
+    # 傳給前端
+    loggedIn = bool(user)
+    username = user["username"] if user else ""
+    
+    return render_template("index.html", loggedIn=loggedIn, username=username)
 
 @app.route('/login', methods=['GET'])
 def login_page():
