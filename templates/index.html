@@ -43,6 +43,7 @@
     font-size: 2em;
     color: #888;
     border-radius: 10px;
+    overflow: hidden;
   }
   #video-mask {
     position: absolute;
@@ -71,9 +72,8 @@
   <a href="/register"><button type="button">註冊</button></a>
 </nav>
 
-
 <section id="video-section">
-  <div class="video-placeholder">
+  <div class="video-placeholder" id="video-container">
     影片內容區域
   </div>
   <div id="video-mask">請登入後觀看影片內容</div>
@@ -81,12 +81,23 @@
 
 <script>
   const videoMask = document.getElementById('video-mask');
+  const videoContainer = document.getElementById('video-container');
 
   // 假設登入狀態用 localStorage 簡易模擬
   window.onload = () => {
     const loggedIn = localStorage.getItem('loggedIn');
     if (loggedIn === 'true') {
       videoMask.style.display = 'none'; // 隱藏遮罩，允許觀看影片
+
+      // 嵌入 YouTube 影片
+      const youtubeID = 'rboiHxBqdZk&list=RDrboiHxBqdZk&start_radio=1'; // <-- 這裡換成你的影片 ID
+      videoContainer.innerHTML = `
+        <iframe width="100%" height="400" 
+                src="https://www.youtube.com/embed/${youtubeID}" 
+                title="YouTube video player" frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen></iframe>
+      `;
     } else {
       videoMask.style.display = 'flex';
     }
