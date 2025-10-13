@@ -77,11 +77,15 @@ def login():
 
     user = users_coll.find_one({'username': username})
     if user and check_password_hash(user['password'], password):
+        # ✅ 登入成功後設定 session
         session['user_id'] = str(user['_id'])
         session['username'] = user['username']
+        session['user'] = {"username": user['username']}  # 👈 加上這行！
+
         return redirect('/')  # 登入成功後跳回首頁
     else:
         return "帳號或密碼錯誤", 401
+
 
 
 # 登出 API
