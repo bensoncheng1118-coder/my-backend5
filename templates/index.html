@@ -455,6 +455,16 @@
   favoritesBtn.addEventListener('click', () => {
     alert('這裡可以實作收藏影片的功能');
   });
+  // 登出按鈕點擊 → 先關閉 modal，再送出表單
+const logoutForm = document.getElementById('logout-form');
+logoutForm.addEventListener('submit', (e) => {
+  // 關閉 modal
+  closeUserModal();
+
+  // 表單照常送出（不阻擋）
+  // 如果你希望用 AJAX 登出可以在這裡改寫
+});
+
 </script>
 
 </body>
