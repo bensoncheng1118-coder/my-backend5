@@ -168,6 +168,37 @@
   #side-form button:hover, #side-form a:hover {
     background-color: #ccc;
   }
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 三欄 */
+  gap: 20px; /* 影片間距 */
+  padding: 20px;
+  justify-items: center;
+}
+
+.video-item {
+  width: 100%;
+  max-width: 360px; /* 控制每個影片寬度 */
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.video-item iframe {
+  width: 100%;
+  height: 200px;
+  display: block;
+}
+
+.video-title {
+  padding: 10px;
+  font-size: 1em;
+  background-color: #f9f9f9;
+}
+
 </style>
 </head>
 <body>
