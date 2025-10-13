@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from flask import render_template
 from flask import redirect
+from flask import Flask, request, render_template_string
 import os
 
 app = Flask(__name__)
@@ -21,6 +22,22 @@ if not mongo or not hasattr(mongo, 'db'):
     raise RuntimeError("MongoDB 連線初始化失敗")
 
 users_coll = mongo.db.users
+
+# 影片列表數據（須和前端頁面youtubeIDs、titles對應）
+youtubeIDs = [
+    'rboiHxBqdZk', '', '', '', '', '',
+    '', '', '', '', '', '',
+    '', '', '', '', '', ''
+]
+
+titles = [
+    '名稱1', '名稱2', '名稱3',
+    '名稱4', '名稱5', '名稱6',
+    '名稱7', '名稱8', '名稱9',
+    '名稱10', '名稱11', '名稱12',
+    '名稱13', '名稱14', '名稱15',
+    '名稱16', '名稱17', '名稱18'
+]
 
 @app.route("/")
 def home():
@@ -114,6 +131,38 @@ def get_videos():
         {"id": 2, "title": "手語進階技巧", "url": "https://example.com/video2.mp4"},
     ]
     return jsonify({'videos': videos})
+
+@app.route('/search')
+def search():
+    q = request.args.get('q', '').strip()
+    if not q:
+        # 若無搜尋關鍵字，直接導回首頁或空列表
+        return render_template_string('<p>請輸入搜尋關鍵字。</p>')
+
+    # 關鍵字忽略大小寫，篩選包含關鍵字的影片
+    matched = []
+    for id_, title in zip(youtubeIDs, titles):
+        if q.lower() in title.lower() and id_:
+            matched.append({'id': id_, 'title': title})
+
+    # 用簡易HTML結果展示影片，您可換成更完整的模板
+    if not matched:
+        return render_template_string(f'<p>找不到關鍵字 "{q}" 相關影片。</p>')
+
+    html = '''
+    <h2>搜尋結果：</h2>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+    {% for video in videos %}
+      <div>
+        <iframe width="100%" height="180" src="https://www.youtube.com/embed/{{video.id}}" frameborder="0" allowfullscreen></iframe>
+        <p>{{video.title}}</p>
+      </div>
+    {% endfor %}
+    </div>
+    <p><a href="/">回首頁</a></p>
+    '''
+    return render_template_string(html, videos=matched)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
