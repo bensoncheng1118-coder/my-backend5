@@ -69,22 +69,35 @@
   #user-menu a:hover, #user-menu button:hover {
     background-color: #eee;
   }
+
+  /* ===== 新增：影片排版 ===== */
   #video-section {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 30px auto;
     position: relative;
   }
-  .video-placeholder {
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .video-item {
     background-color: #ddd;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    color: #888;
     border-radius: 10px;
     overflow: hidden;
+    text-align: center;
+    font-size: 1em;
+    color: #333;
   }
+  .video-item iframe {
+    width: 100%;
+    height: 200px;
+  }
+  .video-title {
+    padding: 10px;
+    background-color: #fff;
+  }
+
   #video-mask {
     position: absolute;
     top: 0; left: 0;
@@ -121,8 +134,8 @@
 </nav>
 
 <section id="video-section">
-  <div class="video-placeholder" id="video-container">
-    影片內容區域
+  <div id="video-container" class="video-grid">
+    <!-- 登入後才會顯示的影片 -->
   </div>
   <div id="video-mask">請登入後觀看影片內容</div>
 </section>
@@ -132,7 +145,6 @@
   window.username = {{ username|tojson }};
 </script>
 
-  
 <script>
   const videoMask = document.getElementById('video-mask');
   const videoContainer = document.getElementById('video-container');
@@ -142,31 +154,48 @@
   const userMenu = document.getElementById('user-menu');
 
   window.onload = () => {
-    // 從後端傳來的登入狀態，如果沒有後端支援再 fallback 到 localStorage
     const loggedIn = window.loggedIn || localStorage.getItem('loggedIn') === 'true';
     const username = window.username || localStorage.getItem('username') || '使用者';
 
     if (loggedIn) {
       videoMask.style.display = 'none'; // 隱藏遮罩
 
-      // 嵌入 YouTube 影片
-      const youtubeID = 'rboiHxBqdZk'; 
-      videoContainer.innerHTML = `
-        <iframe width="100%" height="400" 
-                src="https://www.youtube.com/embed/${youtubeID}" 
-                title="YouTube video player" frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen></iframe>
-      `;
+      // ======= 嵌入 18 部 YouTube 影片 =======
+      const youtubeIDs = [
+        'rboiHxBqdZk', '', '', '', '', '',
+        '', '', '', '', '', '',
+        '', '', '', '', '', ''
+      ];
+      const titles = [
+        '名稱1', '名稱2', '名稱3',
+        '名稱4', '名稱5', '名稱6',
+        '名稱7', '名稱8', '名稱9',
+        '名稱10', '名稱11', '名稱12',
+        '名稱13', '名稱14', '名稱15',
+        '名稱16', '名稱17', '名稱18'
+      ];
 
-      // 顯示 username 並隱藏登入註冊按鈕
+      videoContainer.innerHTML = youtubeIDs.map((id, i) => `
+        <div class="video-item">
+          ${id 
+            ? `<iframe src="https://www.youtube.com/embed/${id}" 
+                      frameborder="0" allow="accelerometer; autoplay; 
+                      clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                      allowfullscreen></iframe>`
+            : `<div style="height:200px;display:flex;justify-content:center;align-items:center;background:#ccc;">尚未設定影片</div>`
+          }
+          <div class="video-title">${titles[i]}</div>
+        </div>
+      `).join('');
+
+      // 顯示使用者名稱
       loginBtn.style.display = 'none';
       registerBtn.style.display = 'none';
       userMenuButton.style.display = 'inline-block';
       userMenuButton.textContent = username;
     } else {
       videoContainer.style.display = 'none';
-      videoMask.style.display = 'none';
+      videoMask.style.display = 'flex';
       loginBtn.style.display = 'inline-block';
       registerBtn.style.display = 'inline-block';
       userMenuButton.style.display = 'none';
@@ -175,11 +204,7 @@
   }
 
   userMenuButton.addEventListener('click', () => {
-    if (userMenu.style.display === 'block') {
-      userMenu.style.display = 'none';
-    } else {
-      userMenu.style.display = 'block';
-    }
+    userMenu.style.display = (userMenu.style.display === 'block') ? 'none' : 'block';
   });
 
   document.addEventListener('click', (e) => {
@@ -188,9 +213,6 @@
     }
   });
 </script>
-
-
-
 
 </body>
 </html>
