@@ -13,36 +13,41 @@
   nav {
     display: flex;
     justify-content: flex-end;
-    background-color: #333;
+    background-color: transparent; /* 改成透明 */
     padding: 10px 20px;
     position: relative;
+    align-items: center; /* 置中垂直對齊 */
   }
   nav button {
-    background-color: #0066cc;
-    color: white;
-    border: none;
+    background-color: transparent; /* 透明底 */
+    color: black; /* 黑字 */
+    border: 1.5px solid black;
     padding: 8px 16px;
     margin-left: 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
+    transition: all 0.3s ease;
   }
   nav button:hover {
-    background-color: #004999;
+    background-color: black; /* 滑鼠懸浮變黑底 */
+    color: white; /* 字變白 */
   }
   #user-menu-button {
-    background: none;
-    color: white;
-    border: none;
+    background: transparent;
+    color: black;
+    border: 1.5px solid black;
     font-size: 1em;
     cursor: pointer;
     margin-left: 10px;
     padding: 8px 16px;
     border-radius: 5px;
     position: relative;
+    transition: all 0.3s ease;
   }
   #user-menu-button:hover {
-    background-color: #004999;
+    background-color: black;
+    color: white;
   }
   #user-menu {
     display: none;
@@ -52,7 +57,7 @@
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    z-index: 10;
+    z-index: 20;
   }
   #user-menu a, #user-menu button {
     display: block;
@@ -70,57 +75,112 @@
     background-color: #eee;
   }
 
-  /* ===== 新增：影片排版 ===== */
-  #video-section {
-    max-width: 1200px;
-    margin: 30px auto;
-    position: relative;
+  /* 漢堡選單按鈕 */
+  #hamburger-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 26px;
+    height: 22px;
+    margin-right: auto; /* 靠左 */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
   }
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  #hamburger-btn:hover {
+    background-color: rgba(0,0,0,0.1);
   }
-  .video-item {
-    background-color: #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
-    font-size: 1em;
-    color: #333;
-  }
-  .video-item iframe {
-    width: 100%;
-    height: 200px;
-  }
-  .video-title {
-    padding: 10px;
-    background-color: #fff;
+  #hamburger-btn div {
+    width: 26px;
+    height: 3px;
+    background-color: black;
+    border-radius: 2px;
+    transition: all 0.3s ease;
   }
 
-  #video-mask {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
+  /* 搜尋欄 */
+  #search-form {
+    margin-left: 20px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 1.5em;
-    color: #555;
-    pointer-events: all;
   }
-  nav form {
-    display: inline;
-    margin: 0;
+  #search-input {
+    padding: 6px 10px;
+    font-size: 1em;
+    border: 1.5px solid black;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+  }
+  #search-btn {
+    padding: 8px 14px;
+    font-size: 1em;
+    border: 1.5px solid black;
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  #search-btn:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  /* 滑出側邊表單 */
+  #side-form {
+    position: fixed;
+    top: 0;
+    left: -280px; /* 初始隱藏在左邊 */
+    width: 280px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+    z-index: 30;
+    transition: left 0.35s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  #side-form.active {
+    left: 0;
+  }
+  #side-form button, #side-form a {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    font-size: 1em;
+    text-align: left;
+    color: black;
+    background: #eee;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  #side-form button:hover, #side-form a:hover {
+    background-color: #ccc;
   }
 </style>
 </head>
 <body>
 
 <nav>
+  <button id="hamburger-btn" aria-label="開啟選單">
+    <div></div>
+    <div></div>
+    <div></div>
+  </button>
+
+  <form id="search-form" action="/search" method="GET" role="search" >
+    <input id="search-input" type="text" name="q" placeholder="搜尋影片或課程" aria-label="搜尋" required />
+    <button id="search-btn" type="submit">搜尋</button>
+  </form>
+
   <a href="/login" id="login-btn"><button type="button">登入</button></a>
   <a href="/register" id="register-btn"><button type="button">註冊</button></a>
 
@@ -132,6 +192,12 @@
     </form>
   </div>
 </nav>
+
+<!-- 新增側邊出來表單 -->
+<div id="side-form" aria-hidden="true">
+  <a href="/account" tabindex="0">帳號管理頁面</a>
+  <button type="button" id="favorites-btn" tabindex="0">收藏影片</button>
+</div>
 
 <section id="video-section">
   <div id="video-container" class="video-grid">
@@ -152,6 +218,8 @@
   const registerBtn = document.getElementById('register-btn');
   const userMenuButton = document.getElementById('user-menu-button');
   const userMenu = document.getElementById('user-menu');
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const sideForm = document.getElementById('side-form');
 
   window.onload = () => {
     const loggedIn = window.loggedIn || localStorage.getItem('loggedIn') === 'true';
@@ -211,6 +279,21 @@
     if (!userMenu.contains(e.target) && e.target !== userMenuButton) {
       userMenu.style.display = 'none';
     }
+    if (!sideForm.contains(e.target) && e.target !== hamburgerBtn) {
+      sideForm.classList.remove('active');
+      sideForm.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  hamburgerBtn.addEventListener('click', () => {
+    const isActive = sideForm.classList.toggle('active');
+    sideForm.setAttribute('aria-hidden', !isActive);
+  });
+
+  // 收藏影片按鈕點擊事件（可自行補充）
+  const favoritesBtn = document.getElementById('favorites-btn');
+  favoritesBtn.addEventListener('click', () => {
+    alert('這裡可以實作收藏影片的功能');
   });
 </script>
 
