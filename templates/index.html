@@ -136,73 +136,6 @@
     background-color: black;
     color: white;
   }
-
-    /* ===== modal / overlay ===== */
-  #modal-overlay {
-    display: none; /* 預設隱藏 */
-    position: fixed;
-    inset: 0; /* top:0; right:0; bottom:0; left:0 */
-    background: rgba(0,0,0,0.45);
-    z-index: 60;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-
-  #user-modal {
-    width: 420px;           /* 模塊較大 */
-    max-width: 95%;
-    background: #fff;
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    text-align: center;
-  }
-
-  #user-modal h2 {
-    margin: 0 0 8px 0;
-    font-size: 1.25rem;
-  }
-
-  #user-modal p { color: #333; margin-bottom: 12px; }
-
-  #user-modal a#account-link {
-    display: block;
-    width: 70%;
-    margin: 10px auto;
-    padding: 12px 10px;
-    background: #eee;
-    border-radius: 10px;
-    text-decoration: none;
-    color: #111;
-    font-weight: 500;
-  }
-
-  #user-modal #logout-btn {
-    display: block;
-    width: 60%;
-    margin: 12px auto 0 auto; /* 置中 */
-    padding: 12px 10px;
-    background: #f55;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-
-  #user-modal #logout-btn:hover { background: #d33; }
-
-  #user-modal #close-modal {
-    display: inline-block;
-    margin-top: 12px;
-    background: transparent;
-    border: none;
-    color: #666;
-    cursor: pointer;
-  }
-
   
   /* 滑出側邊表單 */
   #side-form {
@@ -294,27 +227,12 @@
   <a href="/register" id="register-btn"><button type="button">註冊</button></a>
 
   <button id="user-menu-button" style="display:none;"></button>
-    <!-- Modal 與遮罩 -->
-  <div id="modal-overlay" aria-hidden="true">
-    <div id="user-modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
-      <h2 id="user-modal-title">帳號管理</h2>
-
-      <!-- 你可以放更多帳號資訊在這裡 -->
-      <p id="user-name" style="margin:0 0 12px 0;">使用者：<span id="user-name-text"></span></p>
-
-      <!-- 帳號管理連結 -->
-      <a href="/account" id="account-link">進入帳號管理頁面</a>
-
-      <!-- 登出表單（按鈕置中） -->
-      <form id="logout-form" action="/logout" method="post" style="margin: 14px 0 0 0;">
-        <button type="submit" id="logout-btn">登出</button>
-      </form>
-
-      <!-- 關閉按鈕 -->
-      <button id="close-modal" type="button">關閉</button>
-    </div>
+  <div id="user-menu">
+    <a href="/account">帳號管理</a>
+    <form action="/logout" method="post" style="margin:0;">
+      <button type="submit">登出</button>
+    </form>
   </div>
-
 </nav>
 
 <!-- 新增側邊出來表單 -->
@@ -327,6 +245,7 @@
   <div id="video-container" class="video-grid">
     <!-- 登入後才會顯示的影片 -->
   </div>
+  <div id="video-mask">請登入後觀看影片內容</div>
 </section>
 
 <script>
@@ -394,46 +313,9 @@
     }
   }
 
-    // 取得 modal 與相關元素
-  const modalOverlay = document.getElementById('modal-overlay');
-  const userModal = document.getElementById('user-modal');
-  const closeModalBtn = document.getElementById('close-modal');
-  const userNameText = document.getElementById('user-name-text');
-
-  function openUserModal() {
-    // 在 modal 顯示使用者名稱
-    userNameText.textContent = (window.username && window.username !== '') ? window.username : '使用者';
-    modalOverlay.style.display = 'flex';
-    modalOverlay.setAttribute('aria-hidden', 'false');
-    // 防止背景滾動（可選）
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeUserModal() {
-    modalOverlay.style.display = 'none';
-    modalOverlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  // 當點擊使用者名稱時開啟 modal
-  userMenuButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    
+  userMenuButton.addEventListener('click', () => {
+    userMenu.style.display = (userMenu.style.display === 'block') ? 'none' : 'block';
   });
-
-  // 點遮罩背景或按關閉按鈕會關閉
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) closeUserModal();
-  });
-  closeModalBtn.addEventListener('click', closeUserModal);
-
-  // 按 Esc 關閉
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeUserModal();
-  });
-
-  // （保留其他 document click 處理 sideForm 的邏輯 — 若你有原本偵測側邊欄的程式，請確保不要刪）
-
 
   document.addEventListener('click', (e) => {
     if (!userMenu.contains(e.target) && e.target !== userMenuButton) {
@@ -455,16 +337,6 @@
   favoritesBtn.addEventListener('click', () => {
     alert('這裡可以實作收藏影片的功能');
   });
-  // 登出按鈕點擊 → 先關閉 modal，再送出表單
-const logoutForm = document.getElementById('logout-form');
-logoutForm.addEventListener('submit', (e) => {
-  // 關閉 modal
-  closeUserModal();
-
-  // 表單照常送出（不阻擋）
-  // 如果你希望用 AJAX 登出可以在這裡改寫
-});
-
 </script>
 
 </body>
