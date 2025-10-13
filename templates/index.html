@@ -128,6 +128,12 @@
 </section>
 
 <script>
+  window.loggedIn = {{ loggedIn|tojson }};
+  window.username = {{ username|tojson }};
+</script>
+
+  
+<script>
   const videoMask = document.getElementById('video-mask');
   const videoContainer = document.getElementById('video-container');
   const loginBtn = document.getElementById('login-btn');
@@ -182,10 +188,7 @@
   });
 </script>
 
-<script>
-  window.loggedIn = {{ loggedIn|tojson }};
-  window.username = {{ username|tojson }};
-</script>
+
 
 
 </body>
